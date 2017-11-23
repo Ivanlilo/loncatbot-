@@ -14,12 +14,12 @@ from datetime import datetime
 import time,random,sys,json,codecs,threading,glob,re,os,subprocess
 
 cl = LINETCR.LINE()
-cl.login(token="Em3GgfySmDqtso464uw8.n4oKomxqq+KIn1M4nzTRYa.9EcwdWrVtZ3UWtL/pl/Z5SWSkhVIVPcRC/ujEv+2VDY=")
+cl.login(token="EmCu1gXuOhZ0nLn1KoO5.h+PX1BLpODyt1GJnQ2yGTq.rCAGHOJdQQiMXwwC1MusxyB/i2RyNSa5+/GMqiW/PBs=")
 cl.loginResult()
 
 ki = kk = kc = cl 
 
-print "==loncatbot=="
+print "login success"
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -37,16 +37,12 @@ helpMessage ="""Menu :
 - /wikipedia = get wikipedia
 - /music = get music
 - /lirik = get lyric
-- /say = text to speech
 - /cek = cek tanggal lahir
+- /ginfo = get info group
 - /kalender
 - /time
 - /speed
 - /gift
-- /gift1
-- /gift2
-- /gift3
-- /all gift
 - /about
 - /bye
 ==============
@@ -66,9 +62,17 @@ wait = {
     'autoJoin':True,
     'autoCancel':{"on":True,"members":1},
     'leaveRoom':True,
-    'timeline':False,
+    'timeline':True,
     'autoAdd':True,
-    'message':"Terimakasih telah menambahkan loncatbot sebagai teman\n\nJangan lupa invite ke group\n\nKetik /help untuk bantuan\n[Khusus di group]\n\nJika anda menemukan/melihat bug pada bot ini silakan screenshot dan kirim ke admin\nline.me/ti/p/~imrra",
+    'message':"""Terimakasih telah menambahkan loncatbot sebagai teman
+
+Jangan lupa invite ke group
+
+Ketik /help untuk bantuan
+[Khusus di dalam group]
+
+Jika menemukan bug di bot ini silahkan screenshot dan kirim ke admin
+""",
     "lang":"JP",
     "comment":"Thanks for add me",
     "commentOn":False,
@@ -76,12 +80,11 @@ wait = {
     "wblack":False,
     "dblack":False,
     "clock":False,
-    "cName":" ",
+    "cName":"loncatbot ",
     "blacklist":{},
-    "chatbot":{},
     "wblacklist":False,
     "dblacklist":False,
-    "protectionOn":False,
+    "protectionOn":True,
     "atjointicket":False
     }
 
@@ -104,7 +107,7 @@ def sendMessage(to, text, contentMetadata={}, contentType=0):
     if to not in messageReq:
         messageReq[to] = -1
     messageReq[to] += 1
-
+    
 def yt(query):
     with requests.session() as s:
          isi = []
@@ -148,6 +151,7 @@ def bot(op):
                     pass
                 else:
                     cl.sendText(op.param1,str(wait["message"]))
+                    cl.sendText(op.param1,"Admin & Creator :\nline.me/ti/p/~imrra")
         if op.type == 13:
                 if op.param3 in mid:
                     if op.param2 in Amid:
@@ -205,10 +209,12 @@ def bot(op):
                             cl.rejectGroupInvitation(op.param1)
                         else:
                             cl.acceptGroupInvitation(op.param1)
-                            cl.sendText(msg.to,"Terimakasih telah mengundang loncatbot ke group ^_^")
-                            cl.sendText(msg.to,"Ketik /help untuk bantuan")
+                            cl.sendText(op.param1,"Terimakasih sudah invite loncatbot ke group ^_^")
+                            cl.sendText(op.param1,"Ketik /help untuk bantuan")
                     else:
                         cl.acceptGroupInvitation(op.param1)
+                        cl.sendText(op.param1,"Terimakasih sudah invite loncatbot ke group ^_^")
+                        cl.sendText(op.param1,"Ketik /help untuk bantuan")
                 elif wait["autoCancel"]["on"] == True:
                     if len(G.members) <= wait["autoCancel"]["members"]:
                         cl.rejectGroupInvitation(op.param1)
@@ -433,47 +439,47 @@ def bot(op):
                    if msg.contentMetadata["mid"] in wait["commentBlack"]:
                         del wait["commentBlack"][msg.contentMetadata["mid"]]
                         cl.sendText(msg.to,"deleted")
-                        #ki.sendText(msg.to,"deleted")
-                        #kk.sendText(msg.to,"deleted")
-                        #kc.sendText(msg.to,"deleted")
+                        ki.sendText(msg.to,"deleted")
+                        kk.sendText(msg.to,"deleted")
+                        kc.sendText(msg.to,"deleted")
                         wait["dblack"] = False
 
                    else:
                         wait["dblack"] = False
                         cl.sendText(msg.to,"It is not in the black list")
-                        #ki.sendText(msg.to,"It is not in the black list")
-                        #kk.sendText(msg.to,"It is not in the black list")
-                        #kc.sendText(msg.to,"It is not in the black list")
+                        ki.sendText(msg.to,"It is not in the black list")
+                        kk.sendText(msg.to,"It is not in the black list")
+                        kc.sendText(msg.to,"It is not in the black list")
                elif wait["wblacklist"] == True:
                    if msg.contentMetadata["mid"] in wait["blacklist"]:
                         cl.sendText(msg.to,"already")
-                        #ki.sendText(msg.to,"already")
-                        #kk.sendText(msg.to,"already")
-                        #kc.sendText(msg.to,"already")
+                        ki.sendText(msg.to,"already")
+                        kk.sendText(msg.to,"already")
+                        kc.sendText(msg.to,"already")
                         wait["wblacklist"] = False
                    else:
                         wait["blacklist"][msg.contentMetadata["mid"]] = True
                         wait["wblacklist"] = False
                         cl.sendText(msg.to,"aded")
-                        #ki.sendText(msg.to,"aded")
-                        #kk.sendText(msg.to,"aded")
-                        #kc.sendText(msg.to,"aded")
+                        ki.sendText(msg.to,"aded")
+                        kk.sendText(msg.to,"aded")
+                        kc.sendText(msg.to,"aded")
 
                elif wait["dblacklist"] == True:
                    if msg.contentMetadata["mid"] in wait["blacklist"]:
                         del wait["blacklist"][msg.contentMetadata["mid"]]
                         cl.sendText(msg.to,"deleted")
-                        #ki.sendText(msg.to,"deleted")
-                        #kk.sendText(msg.to,"deleted")
-                        #kc.sendText(msg.to,"deleted")
+                        ki.sendText(msg.to,"deleted")
+                        kk.sendText(msg.to,"deleted")
+                        kc.sendText(msg.to,"deleted")
                         wait["dblacklist"] = False
 
                    else:
                         wait["dblacklist"] = False
                         cl.sendText(msg.to,"It is not in the black list")
-                        #ki.sendText(msg.to,"It is not in the black list")
-                        #kk.sendText(msg.to,"It is not in the black list")
-                        #kc.sendText(msg.to,"It is not in the black list")
+                        ki.sendText(msg.to,"It is not in the black list")
+                        kk.sendText(msg.to,"It is not in the black list")
+                        kc.sendText(msg.to,"It is not in the black list")
                elif wait["contact"] == True:
                     msg.contentType = 0
                     cl.sendText(msg.to,msg.contentMetadata["mid"])
@@ -501,7 +507,7 @@ def bot(op):
                     cl.sendText(msg.to,msg.text)
             elif msg.text is None:
                 return
-            elif msg.text in ["Key","help","Help","/help"]:
+            elif msg.text in ["Key","help","Help"]:
                 if wait["lang"] == "JP":
                     cl.sendText(msg.to,helpMessage)
                 else:
@@ -562,243 +568,15 @@ def bot(op):
                 midd = msg.text.replace("Cv3 invite ","")
                 kc.findAndAddContactsByMid(midd)
                 kc.inviteIntoGroup(msg.to,[midd])
-    #-------------------Music------------------
-            elif 'music ' in msg.text.lower():
-                try:
-                    songname = msg.text.lower().replace('music ','')
-                    params = {'songname': songname}
-                    r = requests.get('http://ide.fdlrcn.com/workspace/yumi-apis/joox?' + urllib.urlencode(params))
-                    data = r.text
-                    data = json.loads(data)
-                    for song in data:
-                        hasil = 'This is Your Music\n'
-                        hasil += 'Judul : ' + song[0]
-                        hasil += '\nDurasi : ' + song[1]
-                        hasil += '\nLink Download : ' + song[4]
-                        cl.sendText(msg.to, hasil)
-                        cl.sendText(msg.to, "Please Wait for audio...")
-                        cl.sendAudioWithURL(msg.to, song[4])
-		except Exception as njer:
-		        cl.sendText(msg.to, str(njer))
-    #--------------------------------------
-            elif "Apakah " in msg.text:
-                  tanya = msg.text.replace("Apakah ","")
-                  jawab = ("iya","Tidak","mungkin")
-                  jawaban = random.choice(jawab)
-                  tts = gTTS(text=jawaban, lang='id')
-                  tts.save('tts.mp3')
-                  cl.sendAudio(msg.to,'tts.mp3')
-                  
-            elif "Kapan " in msg.text:
-                  tanya = msg.text.replace("Kapan ","")
-                  jawab = ("kapan kapan","besok","satu abad lagi","tidak akan","tidak akan pernah")
-                  jawaban = random.choice(jawab)
-                  tts = gTTS(text=jawaban, lang='id')
-                  tts.save('tts.mp3')
-                  cl.sendAudio(msg.to,'tts.mp3')
-    #----------------------------------------
-     #-------------------------------------------------
-            elif "/youtube:" in msg.text.lower():
-                   query = msg.text.split(":")
-                   try:
-                       if len(query) == 3:
-                           isi = yt(query[2])
-                           hasil = isi[int(query[1])-1]
-                           cl.sendText(msg.to, hasil)
-                       else:
-                           isi = yt(query[1])
-                           cl.sendText(msg.to, isi[0])
-                           #cl.sendVideoWithURL(msg.to, song[4])
-                   except Exception as e:
-                       cl.sendText(msg.to, str(e))
-                       
-            #------------------------------------------------
-            elif '/cekig ' in msg.text.lower():
-                try:
-                    instagram = msg.text.lower().replace("/cekig ","")
-                    html = requests.get('https://www.instagram.com/' + instagram + '/?')
-                    soup = BeautifulSoup(html.text, 'html5lib')
-                    data = soup.find_all('meta', attrs={'property':'og:description'})
-                    text = data[0].get('content').split()
-                    data1 = soup.find_all('meta', attrs={'property':'og:image'})
-                    text1 = data1[0].get('content').split()
-                    user = "Nama: " + text[-2] + "\n"
-                    user1 = text[-1]
-                    followers = "Pengikut: " + text[0] + "\n"
-                    following = "Mengikuti: " + text[2] + "\n"
-                    post = "Post: " + text[4] + "\n"
-                    link = "Link: " + "https://www.instagram.com/" + instagram
-                    detail = "Info Akun: " + user1 + "\n\n"
-                    #details = ""
-                    cl.sendText(msg.to, detail + user + followers + following + post + link)
-                    cl.sendImageWithURL(msg.to, text1[0])
-                    #cl.sendImage(msg.to, text1[0])
-                except Exception as njer:
-                	cl.sendText(msg.to, str(njer))
-     #-------------------------------------------------
-            elif "/yt" in msg.text.lower():
-                   query = msg.text.split(" ")
-                   try:
-                       if len(query) == 3:
-                           isi = yt(query[2])
-                           hasil = isi[int(query[1])-1]
-                           cl.sendText(msg.to, hasil)
-                           #cl.sendVideoWithURL(msg.to, isi[int(query[1])-1])
-                       else:
-                           isi = yt(query[1])
-                           cl.sendText(msg.to, isi[0])
-                           cl.sendVideoWithURL(msg.to, isi[0])
-                   except Exception as e:
-                       cl.sendText(msg.to, str(e))
-     #-------------------------------------------------           
-            elif '/lirik ' in msg.text.lower():
-                try:
-                    songname = msg.text.lower().replace('/lyric ','')
-                    params = {'songname': songname}
-                    r = requests.get('http://ide.fdlrcn.com/workspace/yumi-apis/joox?' + urllib.urlencode(params))
-                    data = r.text
-                    data = json.loads(data)
-                    for song in data:
-                        hasil = 'Lirik Lagu : '
-                        hasil += song[0]
-                        hasil += '\n\n'
-                        hasil += song[5]
-                        cl.sendText(msg.to, hasil)
-                        cl.sendAudioWithURL(msg.to, hasil)
-                except Exception as wak:
-                        cl.sendText(msg.to, str(wak))
-#---------------------------------------------------------------
-#---------------------------------------------------------
-            elif "/cek " in msg.text:
-                tanggal = msg.text.replace("/cek ","")
-                r=requests.get('https://script.google.com/macros/exec?service=AKfycbw7gKzP-WYV2F5mc9RaR7yE3Ve1yN91Tjs91hp_jHSE02dSv9w&nama=ervan&tanggal='+tanggal)
-                data=r.text
-                data=json.loads(data)
-                lahir = data["data"]["lahir"]
-                usia = data["data"]["usia"]
-                ultah = data["data"]["ultah"]
-                zodiak = data["data"]["zodiak"]
-                cl.sendText(msg.to,"Tanggal Lahir : "+lahir+"\n\nUmur : "+usia+"\n\nUltah : "+ultah+"\n\nZodiak : "+zodiak)
-#---------------------------------------------------------
-            elif '/wikipedia ' in msg.text.lower():
-                  try:
-                      wiki = msg.text.lower().replace("/wikipedia ","")
-                      wikipedia.set_lang("id")
-                      pesan="Wikipedia : "
-                      pesan+=wikipedia.page(wiki).title
-                      pesan+="\n\n"
-                      pesan+=wikipedia.summary(wiki, sentences=1)
-                      pesan+="\n"
-                      pesan+=wikipedia.page(wiki).url
-                      cl.sendText(msg.to, pesan)
-                  except:
-                          try:
-                              pesan="Text Terlalu Panjang Silahkan Click link di bawah ini\n"
-                              pesan+=wikipedia.page(wiki).url
-                              cl.sendText(msg.to, pesan)
-                          except Exception as e:
-                              cl.sendText(msg.to, str(e))
-#----------------------------------------------------------------
-#-----------------------------------------------
-            elif "/say " in msg.text.lower():
-                    query = msg.text.replace("/say ","")
-                    with requests.session() as s:
-                        s.headers['user-agent'] = 'Mozilla/5.0'
-                        url = 'https://google-translate-proxy.herokuapp.com/api/tts'
-                        params = {'language': 'id', 'speed': '1', 'query': query}
-                        r    = s.get(url, params=params)
-                        mp3  = r.url
-                        cl.sendAudioWithURL(msg.to, mp3)
-#-----------------------------------------------
-#---------------------------------------------------------
-            elif "/dosa " in msg.text:
-                tanya = msg.text.replace("/dosa ","")
-                jawab = ("20%","30%","40%","50%","60%","70%","80%","90%","100%","Tak terhingga")
-                jawaban = random.choice(jawab)
-                cl.sendText(msg.to,"Dosanya " + tanya + " adalah " + jawaban + " Banyak banyak tobat tong ")
-#---------------------------------------------------------
-            elif "/info @" in msg.text:
-                nama = msg.text.replace("/info @","")
-                target = nama.rstrip(' ')
-                van = cl.getGroup(msg.to)
-                for linedev in van.members:
-                    if target == linedev.displayName:
-                        mid = cl.getContact(linedev.mid)
-                        # @riorenata_ix #
-                        try:
-                            cover = cl.channel.getCover(linedev.mid)
-                        except:
-                            cover = ""
-                        cl.sendText(msg.to,"-> Display Name :\n" + mid.displayName + "\n\n-> Mid :\n" + linedev.mid + "\n\n-> Bio :\n" + mid.statusMessage + "\n\n-> Foto Profile :\nhttp://dl.profile.line-cdn.net/" + mid.pictureStatus + "\n\n-> Cover :\n" + str(cover))
-                    else:
-                        pass
-#-------------------------------------------------------------------------------------------
-            elif "/pict group" in msg.text:
-                group = cl.getGroup(msg.to)
-                path ="http://dl.profile.line-cdn.net/" + group.pictureStatus
-                cl.sendImageWithURL(msg.to, path)
-#-------------------------------------------------------------------------------------------
-#---------------------------------------------------------
-            elif msg.text in ["/quote"]:
-                quote = ['Barangsiapa yang suka meninggalkan barang di tempat umum maka ia akan kehilangan barangnya tersebut','Kunci KESUKSESAN itu cuma satu, yakni lu harus BERHASIL']
-                rio = random.choice(quote)
-                cl.sendText(msg.to,rio)
-#---------------------------------------------------------
-#---------------------------------------------------------
-            elif msg.text in ["/kalender"]:
-	    	    wait2['setTime'][msg.to] = datetime.today().strftime('TANGGAL : %Y-%m-%d \nHARI : %A \nJAM : %H:%M:%S')
-	            cl.sendText(msg.to, "KALENDER\n\n" + (wait2['setTime'][msg.to]))
-#---------------------------------------------------------
-            elif msg.text in ["/cek"]:
-            	cl.sendText(msg.to,"contoh : /cek 16-05-2004")
-#---------------------------------------------------------
-            elif msg.text in ["/about"]:
-            	cl.sendText(msg.to,"About :\n\nBot ini dibuat oleh Rio Renata\n\nJika anda menemukan bug di bot ini, silakan screenshot dan kirim ke id line di bawah ini.\nline.me/ti/p/~imrra\n\n\n© I MADE RIO RENATA | 2017")
-#---------------------------------------------------------
-            elif msg.text in ["loncatbot","@loncatbot"]:
-            	cl.sendText(msg.to,"apa kak? ketik /help untuk bantuan")
-#---------------------------------------------------------
-            elif msg.text in ["Remove all chat","/hapus semua chat"]:
-		        cl.removeAllMessages(op.param2)
-		        cl.sendText(msg.to,"Removed all chat")
-#---------------------------------------------------------
-#---------------------------------------------------------
-            elif msg.text in ["/time","/waktu"]:
-                timeNow = datetime.now()
-                timeHours = datetime.strftime(timeNow,"(%H:%M)")
-                day = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday","Friday", "Saturday"]
-                hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"]
-                bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]
-                inihari = datetime.today()
-                hr = inihari.strftime('%A')
-                bln = inihari.strftime('%m')
-                for i in range(len(day)):
-                    if hr == day[i]: hasil = hari[i]
-                for k in range(0, len(bulan)):
-                    if bln == str(k): blan = bulan[k-1]
-                rst = hasil + ", " + inihari.strftime('%d') + " - " + blan + " - " + inihari.strftime('%Y') + "\nJam : [ " + inihari.strftime('%H:%M:%S') + " ]"
-                cl.sendText(msg.to, rst)
-#---------------------------------------------------------
-            elif msg.text in ["/chatbot"]:
-                if msg.to in wait["chatbot"]:
-                        if wait["chatbot"][msg.to] == True:
-                            if msg.text is not None:
-                                text = msg.text
-                                r = requests.get("http://api.ntcorp.us/chatbot/v1/?text=" + text.replace(" ","+") + "&key=beta1.nt")
-                                data = r.text
-                                data = json.loads(data)
-                                if data['status'] == 200:
-                                    if data['result']['result'] == 100:
-                                        cl.sendText(msg.to,"[Auto Respond] " + data['result']['response'].encode('utf-8'))
-            elif msg.text in ["/creator"]:
-                msg.contentType = 13
-                msg.contentMetadata = {'mid': Admim}
-                cl.sendMessage(msg)
             elif msg.text in ["Me"]:
+                msg.contentType = 13
+                msg.contentMetadata = {'mid': mid}
+                cl.sendMessage(msg)
+            elif msg.text in ["Cv1"]:
                 msg.contentType = 13
                 msg.contentMetadata = {'mid': Amid}
                 ki.sendMessage(msg)
-            elif msg.text in ["Cv1"]:
+            elif msg.text in ["Cv2"]:
                 msg.contentType = 13
                 msg.contentMetadata = {'mid': Bmid}
                 kk.sendMessage(msg)
@@ -809,28 +587,28 @@ def bot(op):
                                     'MSGTPL': '5'}
                 msg.text = None
                 cl.sendMessage(msg)
-            elif msg.text in ["æ„›ã®ãƒ—ãƒ¬ã‚¼ãƒ³ãƒˆ","/gift1"]:
+            elif msg.text in ["æ„›ã®ãƒ—ãƒ¬ã‚¼ãƒ³ãƒˆ","Cv1 gift"]:
                 msg.contentType = 9
                 msg.contentMetadata={'PRDID': 'a0768339-c2d3-4189-9653-2909e9bb6f58',
                                     'PRDTYPE': 'THEME',
                                     'MSGTPL': '6'}
                 msg.text = None
                 ki.sendMessage(msg)
-            elif msg.text in ["æ„›ã®ãƒ—ãƒ¬ã‚¼ãƒ³ãƒˆ","/gift2"]:
+            elif msg.text in ["æ„›ã®ãƒ—ãƒ¬ã‚¼ãƒ³ãƒˆ","Cv2 gift"]:
                 msg.contentType = 9
                 msg.contentMetadata={'PRDID': 'a0768339-c2d3-4189-9653-2909e9bb6f58',
                                     'PRDTYPE': 'THEME',
                                     'MSGTPL': '8'}
                 msg.text = None
                 kk.sendMessage(msg)
-            elif msg.text in ["æ„›ã®ãƒ—ãƒ¬ã‚¼ãƒ³ãƒˆ","/gift3"]:
+            elif msg.text in ["æ„›ã®ãƒ—ãƒ¬ã‚¼ãƒ³ãƒˆ","Cv3 gift"]:
                 msg.contentType = 9
                 msg.contentMetadata={'PRDID': 'a0768339-c2d3-4189-9653-2909e9bb6f58',
                                     'PRDTYPE': 'THEME',
                                     'MSGTPL': '10'}
                 msg.text = None
                 kc.sendMessage(msg)
-            elif msg.text in ["æ„›ã®ãƒ—ãƒ¬ã‚¼ãƒ³ãƒˆ","/all gift"]:
+            elif msg.text in ["æ„›ã®ãƒ—ãƒ¬ã‚¼ãƒ³ãƒˆ","All gift"]:
                 msg.contentType = 9
                 msg.contentMetadata={'PRDID': 'a0768339-c2d3-4189-9653-2909e9bb6f58',
                                     'PRDTYPE': 'THEME',
@@ -1604,12 +1382,13 @@ def bot(op):
                         G.preventJoinByTicket(G)
                         ki.updateGroup(G)
 
-            elif msg.text in ["Cv1 join"]:
-                  X = cl.getGroup(msg.to)
+            elif msg.text in ["/loncatbot join"]:
+            	if msg.from_ in admin:
+                  X = rio.getGroup(msg.to)
                   X.preventJoinByTicket = False
-                  cl.updateGroup(X)
+                  rio.updateGroup(X)
                   invsend = 0
-                  Ti = cl.reissueGroupTicket(msg.to)
+                  Ti = rio.reissueGroupTicket(msg.to)
                   ki.acceptGroupInvitationByTicket(msg.to,Ti)
                   G = kk.getGroup(msg.to)
                   G.preventJoinByTicket = True
@@ -1642,13 +1421,12 @@ def bot(op):
                         G.preventJoinByTicket = True
                         kc.updateGroup(G)
 #-----------------------------------------------
-            elif msg.text in ["Bye all"]:
+            elif msg.text in ["/bye"]:
                 if msg.toType == 2:
                     ginfo = cl.getGroup(msg.to)
                     try:
                     	cl.sendText(msg.to,"kakak jahat :(")
                         cl.leaveGroup(msg.to)
-                        #ki.leaveGroup(msg.to)
                         #kk.leaveGroup(msg.to)
                         #kc.leaveGroup(msg.to)
                     except:
@@ -1698,8 +1476,8 @@ def bot(op):
                     for tag in wait["blacklist"]:
                         matched_list+=filter(lambda str: str == tag, gMembMids)
                     if matched_list == []:
-                        kk.sendText(msg.to,"Fuck You")
-                        kc.sendText(msg.to,"Fuck You")
+                        kk.sendText(msg.to,"T_T")
+                        #kc.sendText(msg.to,"Fuck You")
                         return
                     for jj in matched_list:
                         try:
@@ -1716,9 +1494,9 @@ def bot(op):
                     gs = ki.getGroup(msg.to)
                     gs = kk.getGroup(msg.to)
                     gs = kc.getGroup(msg.to)
-                    ki.sendText(msg.to,"ピアノ loncatbot トラック 空かん ネガティブな かさばり じか 具炉 いに らた ^_^")
-                    kk.sendText(msg.to,"Group cleansed.")
-                    kc.sendText(msg.to,"Fuck You All")
+                    ki.sendText(msg.to,"pihak loncatbot tidak akan bertanggung jawab jika group ini rata")
+                    kk.sendText(msg.to,"group ini akan rata sebentar lagi ^_^")
+                    kc.sendText(msg.to,"selamat tinggal semuanya T_T")
                     targets = []
                     for g in gs.members:
                         if _name in g.displayName:
@@ -1879,29 +1657,27 @@ def bot(op):
                 kk.sendText(msg.to,"Chomel pekok 􀜁􀅔Har Har􏿿")
                 kc.sendText(msg.to,"Chomel pekok 􀜁􀅔Har Har􏿿")
             elif msg.text in ["#welcome"]:
-                ki.sendText(msg.to,"Selamat datang di Chivas Family Room")
-                kk.sendText(msg.to,"Jangan nakal ok!")
+                ki.sendText(msg.to,"Selamat datang di group")
+                kk.sendText(msg.to,"Jangan nakal !")
 #-----------------------------------------------
             elif msg.text in ["PING","Ping","ping"]:
                 ki.sendText(msg.to,"PONG 􀨁􀄻double thumbs up􏿿􀜁􀅔Har Har􏿿")
                 kk.sendText(msg.to,"PONG 􀨁􀄻double thumbs up􏿿􀜁􀅔Har Har􏿿")
                 kc.sendText(msg.to,"PONG 􀨁􀄻double thumbs up􏿿􀜁􀅔Har Har􏿿")
 #-----------------------------------------------
-            #elif msg.text in ["Respon","respon"]:
-                #ki.sendText(msg.to,"Cv1")
+            elif msg.text in ["Respon","respon"]:
+                ki.sendText(msg.to,"loncatbot here ^_^")
                 #kk.sendText(msg.to,"Cv2")
                 #kc.sendText(msg.to,"Cv3")
 #-----------------------------------------------
-
-            elif msg.text in ["Sp","Speed","/speed"]:
+            elif msg.text in ["Sp","Speed","speed","/speed"]:
                 start = time.time()
-                cl.sendText(msg.to, "Testing speed response ...")
+                cl.sendText(msg.to, "Mengetes kecepatan respon ...")
                 elapsed_time = time.time() - start
-                cl.sendText(msg.to, "Speed response : %s seconds" % (elapsed_time))
+                cl.sendText(msg.to, "%s detik" % (elapsed_time))
                 #ki.sendText(msg.to, "%sseconds" % (elapsed_time))
                 #kk.sendText(msg.to, "%sseconds" % (elapsed_time))
                 #kc.sendText(msg.to, "%sseconds" % (elapsed_time))
-
 #------------------------------------------------------------------	
             elif "/steal home @" in msg.text:            
                 print "[Command]dp executing"
@@ -1949,21 +1725,21 @@ def bot(op):
             elif msg.text in ["Ban"]:
                 wait["wblacklist"] = True
                 cl.sendText(msg.to,"send contact")
-                #ki.sendText(msg.to,"send contact")
-                #kk.sendText(msg.to,"send contact")
-                #kc.sendText(msg.to,"send contact")
+                ki.sendText(msg.to,"send contact")
+                kk.sendText(msg.to,"send contact")
+                kc.sendText(msg.to,"send contact")
             elif msg.text in ["Unban"]:
                 wait["dblacklist"] = True
                 cl.sendText(msg.to,"send contact")
-                #ki.sendText(msg.to,"send contact")
-                #kk.sendText(msg.to,"send contact")
-                #kc.sendText(msg.to,"send contact")
+                ki.sendText(msg.to,"send contact")
+                kk.sendText(msg.to,"send contact")
+                kc.sendText(msg.to,"send contact")
             elif msg.text in ["Banlist"]:
                 if wait["blacklist"] == {}:
                     cl.sendText(msg.to,"nothing")
-                    #ki.sendText(msg.to,"nothing")
-                    #kk.sendText(msg.to,"nothing")
-                    #kc.sendText(msg.to,"nothing")
+                    ki.sendText(msg.to,"nothing")
+                    kk.sendText(msg.to,"nothing")
+                    kc.sendText(msg.to,"nothing")
                 else:
                     cl.sendText(msg.to,"Blacklist user")
                     mc = ""
@@ -2026,7 +1802,209 @@ def bot(op):
                             group.name = name
                             cl.updateGroup(group)
                     except:
-                        cl.sendText(msg.to,"Error")	
+                        cl.sendText(msg.to,"Error")	          
+    #-------------------Music------------------ 
+            elif '/music ' in msg.text.lower():
+                try:
+                    songname = msg.text.lower().replace('/music ','')
+                    params = {'songname': songname}
+                    r = requests.get('http://ide.fdlrcn.com/workspace/yumi-apis/joox?' + urllib.urlencode(params))
+                    data = r.text
+                    data = json.loads(data)
+                    for song in data:
+                        hasil = 'This is Your Music\n'
+                        hasil += 'Judul : ' + song[0]
+                        hasil += '\nDurasi : ' + song[1]
+                        hasil += '\nLink Download : ' + song[4]
+                        cl.sendText(msg.to, hasil)
+                        cl.sendText(msg.to, "Please Wait for audio...")
+                        cl.sendAudioWithURL(msg.to, song[4])
+		except Exception as njer:
+		        cl.sendText(msg.to, str(njer))
+    #--------------------------------------
+    #-----------------------------------------------
+            elif "/say-id: " in msg.text.lower():
+                    query = msg.text.lower().replace("/say-id: ","")
+                    with requests.session() as s:
+                        s.headers['user-agent'] = 'Mozilla/5.0'
+                        url = 'https://google-translate-proxy.herokuapp.com/api/tts'
+                        params = {'language': 'id', 'speed': '1', 'query': query}
+                        r    = s.get(url, params=params)
+                        mp3  = r.url
+                        cl.sendAudioWithURL(msg.to, mp3)
+#-----------------------------------------------
+            elif "/say-en: " in msg.text.lower():
+                    query = msg.text.lower().replace("/say-en: ","")
+                    with requests.session() as s:
+                        s.headers['user-agent'] = 'Mozilla/5.0'
+                        url = 'https://google-translate-proxy.herokuapp.com/api/tts'
+                        params = {'language': 'en', 'speed': '1', 'query': query}
+                        r    = s.get(url, params=params)
+                        mp3  = r.url
+                        cl.sendAudioWithURL(msg.to, mp3)
+#-----------------------------------------------
+            elif "/say-jp: " in msg.text.lower():
+                    query = msg.text.lower().replace("/say-jp: ","")
+                    with requests.session() as s:
+                        s.headers['user-agent'] = 'Mozilla/5.0'
+                        url = 'https://google-translate-proxy.herokuapp.com/api/tts'
+                        params = {'language': 'ja', 'speed': '1', 'query': query}
+                        r    = s.get(url, params=params)
+                        mp3  = r.url
+                        cl.sendAudioWithURL(msg.to, mp3)
+#---------------------------------------------------------
+            elif "Apakah " in msg.text:
+                  tanya = msg.text.replace("Apakah ","")
+                  jawab = ("iya","Tidak","mungkin")
+                  jawaban = random.choice(jawab)
+                  tts = gTTS(text=jawaban, lang='id')
+                  tts.save('tts.mp3')
+                  cl.sendAudio(msg.to,'tts.mp3')      
+            elif "Kapan " in msg.text:
+                  tanya = msg.text.replace("Kapan ","")
+                  jawab = ("kapan kapan","besok","satu abad lagi","tidak akan pernah")
+                  jawaban = random.choice(jawab)
+                  tts = gTTS(text=jawaban, lang='id')
+                  tts.save('tts.mp3')
+                  cl.sendAudio(msg.to,'tts.mp3')
+    #----------------------------------------
+     #-------------------------------------------------
+            elif "/youtube:" in msg.text.lower():
+                   query = msg.text.split(":")
+                   try:
+                       if len(query) == 3:
+                           isi = yt(query[2])
+                           hasil = isi[int(query[1])-1]
+                           cl.sendText(msg.to, hasil)
+                       else:
+                           isi = yt(query[1])
+                           cl.sendText(msg.to, isi[0])
+                           #cl.sendVideoWithURL(msg.to, song[4])
+                   except Exception as e:
+                       cl.sendText(msg.to, str(e))                  
+            #------------------------------------------------
+            elif '/cekig ' in msg.text.lower():
+                try:
+                    instagram = msg.text.lower().replace("/cekig ","")
+                    html = requests.get('https://www.instagram.com/' + instagram + '/?')
+                    soup = BeautifulSoup(html.text, 'html5lib')
+                    data = soup.find_all('meta', attrs={'property':'og:description'})
+                    text = data[0].get('content').split()
+                    data1 = soup.find_all('meta', attrs={'property':'og:image'})
+                    text1 = data1[0].get('content').split()
+                    user = "Nama: " + text[-2] + "\n"
+                    user1 = text[-1]
+                    followers = "Pengikut: " + text[0] + "\n"
+                    following = "Mengikuti: " + text[2] + "\n"
+                    post = "Post: " + text[4] + "\n"
+                    link = "Link: " + "https://www.instagram.com/" + instagram
+                    detail = "Info Akun: " + user1 + "\n\n"
+                    #details = ""
+                    cl.sendText(msg.to, detail + user + followers + following + post + link)
+                    cl.sendImageWithURL(msg.to, text1[0])
+                    #cl.sendImage(msg.to, text1[0])
+                except Exception as njer:
+                	cl.sendText(msg.to, str(njer))
+     #-------------------------------------------------
+     #-------------------------------------------------           
+            elif '/lirik ' in msg.text.lower():
+                try:
+                    songname = msg.text.lower().replace('/lyric ','')
+                    params = {'songname': songname}
+                    r = requests.get('http://ide.fdlrcn.com/workspace/yumi-apis/joox?' + urllib.urlencode(params))
+                    data = r.text
+                    data = json.loads(data)
+                    for song in data:
+                        hasil = 'Lirik Lagu : '
+                        hasil += song[0]
+                        hasil += '\n\n'
+                        hasil += song[5]
+                        cl.sendText(msg.to, hasil)
+                        #cl.sendAudioWithURL(msg.to, hasil)
+                except Exception as wak:
+                        cl.sendText(msg.to, str(wak))
+#---------------------------------------------------------------
+            elif "cek" in msg.text:
+            	cl.sendText(msg.to,"contoh : /cek 16-05-2004")
+#---------------------------------------------------------
+            elif "/cek " in msg.text:
+                tanggal = msg.text.replace("/cek ","")
+                r=requests.get('https://script.google.com/macros/exec?service=AKfycbw7gKzP-WYV2F5mc9RaR7yE3Ve1yN91Tjs91hp_jHSE02dSv9w&nama=ervan&tanggal='+tanggal)
+                data=r.text
+                data=json.loads(data)
+                lahir = data["data"]["lahir"]
+                usia = data["data"]["usia"]
+                ultah = data["data"]["ultah"]
+                zodiak = data["data"]["zodiak"]
+                cl.sendText(msg.to,"Tanggal Lahir : "+lahir+"\n\nUmur : "+usia+"\n\nUltah : "+ultah+"\n\nZodiak : "+zodiak)
+#---------------------------------------------------------
+            elif '/wikipedia ' in msg.text.lower():
+                  try:
+                      wiki = msg.text.lower().replace("/wikipedia ","")
+                      wikipedia.set_lang("id")
+                      pesan="Wikipedia : "
+                      pesan+=wikipedia.page(wiki).title
+                      pesan+="\n\n"
+                      pesan+=wikipedia.summary(wiki, sentences=1)
+                      pesan+="\n"
+                      pesan+=wikipedia.page(wiki).url
+                      cl.sendText(msg.to, pesan)
+                  except:
+                          try:
+                              pesan="Text Terlalu Panjang Silahkan Click link di bawah ini\n"
+                              pesan+=wikipedia.page(wiki).url
+                              cl.sendText(msg.to, pesan)
+                          except Exception as e:
+                              cl.sendText(msg.to, str(e))
+#----------------------------------------------------------------
+#-----------------------------------------------
+#-----------------------------------------------
+#---------------------------------------------------------
+            elif "/dosa " in msg.text:
+                tanya = msg.text.replace("/dosa ","")
+                jawab = ("20%","30%","40%","50%","60%","70%","80%","90%","100%","Tak terhingga")
+                jawaban = random.choice(jawab)
+                cl.sendText(msg.to,"Dosanya " + tanya + " adalah " + jawaban + " Banyak banyak tobat tong ")
+#---------------------------------------------------------
+#-------------------------------------------------------------------------------------------
+            elif "/pict group" in msg.text:
+                group = cl.getGroup(msg.to)
+                path ="http://dl.profile.line-cdn.net/" + group.pictureStatus
+                cl.sendImageWithURL(msg.to, path)
+#-------------------------------------------------------------------------------------------
+#---------------------------------------------------------
+            elif msg.text in ["/quote"]:
+                quote = ['Barangsiapa yang suka meninggalkan barang di tempat umum maka ia akan kehilangan barangnya tersebut','Kunci KESUKSESAN itu cuma satu, yakni lu harus BERHASIL']
+                rio = random.choice(quote)
+                cl.sendText(msg.to,rio)
+#---------------------------------------------------------
+#---------------------------------------------------------
+            elif msg.text in ["/kalender"]:
+	    	    wait2['setTime'][msg.to] = datetime.today().strftime('TANGGAL : %Y-%m-%d \nHARI : %A \nJAM : %H:%M:%S')
+	            cl.sendText(msg.to, "KALENDER\n\n" + (wait2['setTime'][msg.to]))
+#---------------------------------------------------------    
+#---------------------------------------------------------
+            elif msg.text in ["/about"]:
+            	cl.sendText(msg.to,"About :\n\nBot ini dibuat oleh Rio Renata\n\nJika anda menemukan bug di bot ini, silakan screenshot dan kirim ke id line di bawah ini.\nline.me/ti/p/~imrra")
+#---------------------------------------------------------
+#---------------------------------------------------------
+#---------------------------------------------------------
+            elif msg.text in ["/time","/waktu"]:
+                timeNow = datetime.now()
+                timeHours = datetime.strftime(timeNow,"(%H:%M)")
+                day = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday","Friday", "Saturday"]
+                hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"]
+                bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]
+                inihari = datetime.today()
+                hr = inihari.strftime('%A')
+                bln = inihari.strftime('%m')
+                for i in range(len(day)):
+                    if hr == day[i]: hasil = hari[i]
+                for k in range(0, len(bulan)):
+                    if bln == str(k): blan = bulan[k-1]
+                rst = hasil + ", " + inihari.strftime('%d') + " - " + blan + " - " + inihari.strftime('%Y') + "\nJam : [ " + inihari.strftime('%H:%M:%S') + " ]"
+                cl.sendText(msg.to, rst)
+#---------------------------------------------------------
 				
             elif "albumâ†’" in msg.text:
                 try:
